@@ -14,15 +14,15 @@ def my_home():
 def new(page_name):
     return render_template(page_name)
 
-def write_to_file(data):
-    with open('./web_server/database.txt', mode='a') as database:
-        email=data['email']
-        subject=data['subject']
-        message=data['message']
-        database.write(f'\n{email}, {subject}, {message}')
+# def write_to_file(data):
+#     with open('./web_server/database.txt', mode='a') as database:
+#         email=data['email']
+#         subject=data['subject']
+#         message=data['message']
+#         database.write(f'\n{email}, {subject}, {message}')
 
 def write_to_csv(data):
-    with open('./web_server/database.csv', newline='', mode='a') as database2:
+    with open('database.csv', newline='', mode='a') as database2:
         email=data['email']
         subject=data['subject']
         message=data['message']
@@ -33,10 +33,12 @@ def write_to_csv(data):
 @app.route('/submit_form', methods=['POST', 'GET'])
 def submit_form():
     if request.method=='POST':
-        data=request.form.to_dict()
-        write_to_csv(data)
-        return redirect('thankyou.html')
-
+        try:
+            data=request.form.to_dict()
+            write_to_csv(data)
+            return redirect('thankyou.html')
+        except:
+            print('not saved in database!!!!')
 
     else:
         return 'something went wrong'
